@@ -7,6 +7,8 @@ int motion_started;
 int motion_ended;
 
 void sendEmail() {
+    String data = String(10);
+    Particle.publish("motion_sensor", data, PRIVATE);
 }
 
 void setup() {
@@ -22,5 +24,13 @@ void loop() {
     }else{
         motion_ended = 1;
     }
-    delay(DURT);
+
+    if(motion_started == 1 && motion_ended == 1) {
+        sendEmail();
+        motion_started = 0;
+        motion_ended = 0;
+        // delay(TIBTWSEND);
+    }else{
+        delay(DURT);
+    }
 }
