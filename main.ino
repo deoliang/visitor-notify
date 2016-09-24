@@ -1,36 +1,23 @@
-#define PIRPIN A0
-#define THRESH 2000
-#define DURT 5000
-#define TIBTWSEND 600000
+#define PIRPIN D6
+#define DURT 2000
 
-int motion_started;
-int motion_ended;
+int flag = 0;
 
-void sendEmail() {
-    String data = String(10);
-    Particle.publish("motion_sensor", data, PRIVATE);
+void sendStatus() {
+  
 }
 
 void setup() {
-    motion_started = 0;
-    motion_ended = 0;
+  pinMode(PIRPIN, INPUT);
 }
 
 void loop() {
-    int rval = analogRead(PIRPIN);
-    
-    if(rval > THRESH) {
-        motion_started = 1;
-    }else{
-        motion_ended = 1;
+  if (digitalRead(PIRPIN) == HIGH) {
+    flag = 1;
+  } else {
+    if (flag) {
+      flag = 0;
     }
-
-    if(motion_started == 1 && motion_ended == 1) {
-        sendEmail();
-        motion_started = 0;
-        motion_ended = 0;
-        // delay(TIBTWSEND);
-    }else{
-        delay(DURT);
-    }
+  }
+  delay(DURT);
 }
