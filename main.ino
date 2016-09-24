@@ -2,7 +2,6 @@
 #define DURT 2000
 
 int flag = 0;
-String status = String(5);
 
 void sendStatus(String s) {
   Particle.publish("motion_sensor", s, PRIVATE);
